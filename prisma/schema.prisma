@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id // Clerk user ID or Mock User ID
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     Book[]
+}
+
+model Book {
+  id          String          @id @default(uuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  coverImage  String?
+  status      String          @default("PLANNING") // "PLANNING", "WRITING", "EDITING", "COMPLETED", "ARCHIVED"
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  chapters    Chapter[]
+  characters  Character[]
+  locations   Location[]
+  notes       Note[]
+  events      TimelineEvent[]
+  relationships Relationship[]
+}
+
+model Chapter {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  title       String
+  content     String   // HTML rich text from TipTap
+  order       Int      @default(0)
+  wordCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  mentions    Mention[]
+}
+
+model Character {
+  id              String         @id @default(uuid())
+  bookId          String
+  book            Book           @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  aliases         String?        // Comma-separated alternative names for mention scanner
+  age             String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  relationshipsA  Relationship[] @relation("CharA")
+  relationshipsB  Relationship[] @relation("CharB")
+}
+
+model Location {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  bookId    String
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TimelineEvent {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  eventDate   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Relationship {
+  id               String    @id @default(uuid())
+  bookId           String
+  book             Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  characterAId     String
+  characterA       Character @relation("CharA", fields: [characterAId], references: [id], onDelete: Cascade)
+  characterBId     String
+  characterB       Character @relation("CharB", fields: [characterBId], references: [id], onDelete: Cascade)
+  relationshipType String    // e.g. "Friend", "Enemy", "Parent", "Sibling", "Lover"
+  createdAt        DateTime  @default(now())
+}
+
+model Mention {
+  id         String   @id @default(uuid())
+  chapterId  String
+  chapter    Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  entityId   String
+  entityType String   // "CHARACTER" | "LOCATION"
+  createdAt  DateTime @default(now())
+}

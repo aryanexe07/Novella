@@ -1,26 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
+
+
+@theme {
+  --color-nb-yellow: #FDE047;
+  --color-nb-pink: #F472B6;
+  --color-nb-cyan: #22D3EE;
+  --color-nb-green: #4ADE80;
+  --color-nb-orange: #FB923C;
+  --color-nb-purple: #C084FC;
+  --color-nb-cream: #FCFBF7;
+  --color-nb-navy: #1E293B;
+  
+  --font-sans: 'Outfit', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FCFBF7;
+  --foreground: #000000;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Neo-Brutalist Utility Classes */
+@utility nb-border {
+  border: 4px solid #000000;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility nb-border-thin {
+  border: 2px solid #000000;
+}
+
+@utility nb-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+@utility nb-shadow-lg {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
+
+@utility nb-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+@utility nb-hover {
+  transition: all 0.15s ease-in-out;
+  &:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0px 0px #000000;
+  }
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px #000000;
   }
 }
 
+@utility nb-hover-btn {
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #000000;
+  }
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px #000000;
+  }
+}
+
+@utility nb-card {
+  @apply nb-border bg-white text-black nb-shadow p-6 rounded-none;
+}
+
+@utility nb-btn {
+  @apply nb-border nb-shadow nb-hover-btn font-bold px-4 py-2 text-black rounded-none select-none inline-flex items-center justify-center gap-2;
+  font-family: var(--font-display);
+}
+
+@utility nb-btn-primary {
+  @apply nb-btn bg-[var(--color-nb-yellow)] hover:bg-yellow-400 active:bg-[var(--color-nb-yellow)];
+}
+
+@utility nb-btn-secondary {
+  @apply nb-btn bg-[var(--color-nb-pink)] hover:bg-pink-500 active:bg-[var(--color-nb-pink)];
+}
+
+@utility nb-btn-info {
+  @apply nb-btn bg-[var(--color-nb-cyan)] hover:bg-cyan-400 active:bg-[var(--color-nb-cyan)];
+}
+
+@utility nb-btn-success {
+  @apply nb-btn bg-[var(--color-nb-green)] hover:bg-green-500 active:bg-[var(--color-nb-green)];
+}
+
+@utility nb-btn-danger {
+  @apply nb-btn bg-red-400 hover:bg-red-500 active:bg-red-400;
+}
+
+@utility nb-input {
+  @apply nb-border px-4 py-2 bg-white text-black outline-none focus:bg-yellow-50 focus:ring-2 focus:ring-black rounded-none font-medium placeholder-neutral-500;
+}
+
+@utility nb-select {
+  @apply nb-border px-4 py-2 bg-white text-black outline-none focus:bg-yellow-50 rounded-none font-medium;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* TipTap ProseMirror Editor Styling */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p {
+  margin-bottom: 1rem;
+  line-height: 1.65;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-top: 1.75rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-display);
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display);
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #000000;
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+  background-color: #F4F4F5;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.ProseMirror a {
+  text-decoration: underline;
+  color: var(--color-nb-pink);
+  font-weight: 800;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a3a3a3;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
 }
