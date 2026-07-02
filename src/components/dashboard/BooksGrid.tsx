@@ -85,7 +85,7 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
         {
           ...newBook,
           _count: { chapters: 0, characters: 0, locations: 0 }
-        } as any,
+        } satisfies BookItem,
         ...books
       ]);
 
@@ -117,7 +117,7 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
       await updateBook(selectedBook.id, {
         title,
         description,
-        coverImage: coverImage || null as any,
+        coverImage: coverImage || undefined,
         status,
       });
 

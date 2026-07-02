@@ -6,7 +6,6 @@ import {
   PenTool, 
   Flame, 
   Plus, 
-  Search, 
   ArrowRight,
   TrendingUp,
   Sparkles,
@@ -56,8 +55,6 @@ export default async function DashboardPage() {
   const totalBooks = books.length;
   let totalChapters = 0;
   let totalWords = 0;
-  let totalCharacters = 0;
-  let totalLocations = 0;
 
   // Recent chapters list
   interface RecentChapterItem {
@@ -84,8 +81,6 @@ export default async function DashboardPage() {
 
   books.forEach(book => {
     totalChapters += book.chapters.length;
-    totalCharacters += book.characters.length;
-    totalLocations += book.locations.length;
 
     book.chapters.forEach(ch => {
       totalWords += ch.wordCount;
@@ -154,7 +149,7 @@ export default async function DashboardPage() {
       <div className="nb-card bg-nb-yellow flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl md:text-4xl font-black font-display tracking-tight leading-none uppercase">
-            Welcome back, {user.name.split(" ")[0]}!
+            Welcome back, {(user.name ?? "Writer").split(" ")[0]}!
           </h2>
           <p className="text-sm font-bold text-neutral-800 mt-2">
             You have written <span className="underline decoration-wavy decoration-nb-pink font-black">{totalWords.toLocaleString()} words</span> across {totalBooks} book{totalBooks !== 1 && "s"}. Keep it going!

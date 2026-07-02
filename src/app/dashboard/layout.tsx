@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   }
 
   // 2. Fetch user's books for the sidebar
-  let books = [];
+  let books: Awaited<ReturnType<typeof getBooks>> = [];
   try {
     books = await getBooks();
   } catch (error) {

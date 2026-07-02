@@ -9,7 +9,7 @@ export default async function BooksPage() {
   const user = await ensureUserExists();
   if (!user) return null;
 
-  let books = [];
+  let books: Awaited<ReturnType<typeof getBooks>> = [];
   try {
     books = await getBooks();
   } catch (error) {

@@ -3,14 +3,11 @@ import Link from "next/link";
 import { 
   PenTool, 
   Users, 
-  MapPin, 
   Notebook, 
   Calendar, 
   ArrowRight,
   Sparkles,
-  Zap,
-  BookOpen,
-  Eye
+  Zap
 } from "lucide-react";
 
 export default function LandingPage() {

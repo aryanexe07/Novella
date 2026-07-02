@@ -10,9 +10,7 @@ import {
   Plus, 
   Menu, 
   X, 
-  BookMarked,
-  Book,
-  User
+  Book
 } from "lucide-react";
 import { UserButton } from "@/components/providers/AuthProvider";
 import { SearchBox } from "@/components/SearchBox";

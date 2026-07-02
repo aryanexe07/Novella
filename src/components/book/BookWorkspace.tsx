@@ -16,14 +16,12 @@ import {
   ArrowDown, 
   Link as LinkIcon, 
   X,
-  BookOpen,
-  CalendarDays,
   UserPlus
 } from "lucide-react";
 import { Editor } from "@/components/Editor";
 
 // Server action imports
-import { createChapter, deleteChapter, reorderChapters, updateChapter } from "@/lib/actions/chapterActions";
+import { createChapter, deleteChapter, reorderChapters } from "@/lib/actions/chapterActions";
 import { createCharacter, updateCharacter, deleteCharacter, createRelationship, deleteRelationship } from "@/lib/actions/characterActions";
 import { createLocation, updateLocation, deleteLocation } from "@/lib/actions/locationActions";
 import { createNote, updateNote, deleteNote } from "@/lib/actions/noteActions";
@@ -36,6 +34,14 @@ interface Chapter {
   order: number;
   wordCount: number;
   updatedAt: Date;
+}
+
+interface MentionWithChapter {
+  id: string;
+  chapter: {
+    id: string;
+    title: string;
+  };
 }
 
 interface Character {
@@ -112,7 +118,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
   const [isCharCreateOpen, setIsCharCreateOpen] = useState(false);
   const [isCharDetailsOpen, setIsCharDetailsOpen] = useState(false);
   const [charForm, setCharForm] = useState({ name: "", description: "", aliases: "", age: "", notes: "" });
-  const [charMentions, setCharMentions] = useState<any[]>([]);
+  const [charMentions, setCharMentions] = useState<MentionWithChapter[]>([]);
 
   // Relationship Form State
   const [relationForm, setRelationForm] = useState({ targetCharId: "", type: "" });
@@ -122,7 +128,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
   const [isLocCreateOpen, setIsLocCreateOpen] = useState(false);
   const [isLocDetailsOpen, setIsLocDetailsOpen] = useState(false);
   const [locForm, setLocForm] = useState({ name: "", description: "", notes: "" });
-  const [locMentions, setLocMentions] = useState<any[]>([]);
+  const [locMentions, setLocMentions] = useState<MentionWithChapter[]>([]);
 
   // Note State
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -180,7 +186,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
         }
       }
     }
-  }, [searchParams, book]);
+  }, [searchParams, book, selectedChapterId]);
 
   // Set default selected chapter
   useEffect(() => {
@@ -1230,7 +1236,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
                       Not mentioned in any chapters yet. (The database automatically links characters on save!)
                     </p>
                   ) : (
-                    charMentions.map((men: any) => (
+                    charMentions.map((men: MentionWithChapter) => (
                       <button
                         key={men.id}
                         onClick={() => {
@@ -1437,7 +1443,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
                       Not mentioned in any chapters yet. (The database automatically links locations on save!)
                     </p>
                   ) : (
-                    locMentions.map((men: any) => (
+                    locMentions.map((men: MentionWithChapter) => (
                       <button
                         key={men.id}
                         onClick={() => {

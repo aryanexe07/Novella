@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
-import { ClerkProvider, SignInButton as ClerkSignInButton, UserButton as ClerkUserButton, SignIn as ClerkSignedIn, useUser as useClerkUser, useAuth as useClerkAuth } from "@clerk/nextjs";
+import React, { createContext } from "react";
+import { ClerkProvider, SignInButton as ClerkSignInButton, useUser as useClerkUser, useAuth as useClerkAuth } from "@clerk/nextjs";
 
 // Check if Clerk is enabled via publishable key
 export const isClerkEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;

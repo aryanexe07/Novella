@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X, Book, FileText, Users, MapPin, Notebook } from "lucide-react";
+import { Search, X, FileText, Users, MapPin, Notebook } from "lucide-react";
 import { globalSearch } from "@/lib/actions/searchActions";
 
 interface BookSummary {
