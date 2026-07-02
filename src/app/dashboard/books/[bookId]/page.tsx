@@ -5,7 +5,7 @@ import { getBookById } from "@/lib/actions/bookActions";
 import { BookWorkspace } from "@/components/book/BookWorkspace";
 
 interface PageProps {
-  params: Promise<{ bookId: string }> | { bookId: string };
+  params: Promise<{ bookId: string }>;
 }
 
 export const revalidate = 0; // Prevent server-side page caching for fresh DB operations

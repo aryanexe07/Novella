@@ -46,7 +46,7 @@ export function DashboardShell({ children, initialBooks }: DashboardShellProps) 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[var(--color-nb-cream)] text-black">
+    <div className="h-screen flex flex-col md:flex-row bg-[var(--color-nb-cream)] text-black overflow-hidden">
       {/* Search Palette Component */}
       <SearchBox isOpen={searchOpen} onClose={() => setSearchOpen(false)} books={initialBooks} />
 
@@ -89,7 +89,7 @@ export function DashboardShell({ children, initialBooks }: DashboardShellProps) 
           w-72 bg-white border-r-4 border-black
           flex flex-col justify-between
           transition-transform duration-300 md:translate-x-0
-          h-full
+          h-full md:h-screen shrink-0
           ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -204,7 +204,7 @@ export function DashboardShell({ children, initialBooks }: DashboardShellProps) 
       </aside>
 
       {/* Main View Area */}
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Desktop Top Header */}
         <header className="hidden md:flex items-center justify-between px-8 py-5 border-b-4 border-black bg-white z-10 sticky top-0">
           <div>
@@ -229,7 +229,7 @@ export function DashboardShell({ children, initialBooks }: DashboardShellProps) 
         </header>
 
         {/* Inner Content Workspace */}
-        <div className="flex-1 p-6 md:p-8 overflow-y-auto bg-[var(--color-nb-cream)]">
+        <div className="flex-1 p-6 md:p-8 overflow-y-auto bg-[var(--color-nb-cream)] min-h-0">
           {children}
         </div>
       </main>
