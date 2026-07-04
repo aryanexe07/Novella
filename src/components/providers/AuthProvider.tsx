@@ -111,7 +111,7 @@ export function SignInButton({ children, mode }: { children?: React.ReactNode; m
 
 export function UserButton() {
   if (isClerkEnabled) {
-    return ;
+    return null;
   }
 
   return (
