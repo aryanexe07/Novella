@@ -24,10 +24,19 @@ export async function getCurrentUser() {
  * Returns the DB user record, or null if unauthenticated.
  */
 export async function ensureUserExists() {
+  const { userId } = await clerkAuth();
+  if (!userId) return null;
+
+  // 1. Try to find the user in the database first (fast path)
+  let dbUser = await db.user.findUnique({ where: { id: userId } });
+  if (dbUser) return dbUser;
+
+  // 2. If not found, fetch Clerk user details (slow path)
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const dbUser = await db.user.upsert({
+  // 3. Upsert to handle concurrent requests safely creating the user
+  dbUser = await db.user.upsert({
     where: { id: user.id },
     update: {
       email: user.email,
