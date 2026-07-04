@@ -24,30 +24,35 @@ export async function getCurrentUser() {
  * Returns the DB user record, or null if unauthenticated.
  */
 export async function ensureUserExists() {
-  const { userId } = await clerkAuth();
-  if (!userId) return null;
+  try {
+    const { userId } = await clerkAuth();
+    if (!userId) return null;
 
-  // 1. Try to find the user in the database first (fast path)
-  let dbUser = await db.user.findUnique({ where: { id: userId } });
-  if (dbUser) return dbUser;
+    // 1. Try to find the user in the database first (fast path)
+    let dbUser = await db.user.findUnique({ where: { id: userId } });
+    if (dbUser) return dbUser;
 
-  // 2. If not found, fetch Clerk user details (slow path)
-  const user = await getCurrentUser();
-  if (!user) return null;
+    // 2. If not found, fetch Clerk user details (slow path)
+    const user = await getCurrentUser();
+    if (!user) return null;
 
-  // 3. Upsert to handle concurrent requests safely creating the user
-  dbUser = await db.user.upsert({
-    where: { id: user.id },
-    update: {
-      email: user.email,
-      name: user.name,
-    },
-    create: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    },
-  });
+    // 3. Upsert to handle concurrent requests safely creating the user
+    dbUser = await db.user.upsert({
+      where: { id: user.id },
+      update: {
+        email: user.email,
+        name: user.name,
+      },
+      create: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    });
 
-  return dbUser;
+    return dbUser;
+  } catch (error) {
+    console.error("Error in ensureUserExists:", error);
+    return null;
+  }
 }
