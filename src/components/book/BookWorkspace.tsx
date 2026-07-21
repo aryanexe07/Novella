@@ -588,7 +588,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       </div>
 
       {/* Tabs list */}
-      <div className="flex flex-wrap gap-2 border-b-2 border-black pb-2 overflow-x-auto select-none">
+      <div className="w-full flex flex-wrap gap-2 border-b-2 border-black pb-2 select-none">
         {tabs.map(t => {
           const isActive = activeTab === t.id;
           const Icon = t.icon;
@@ -600,7 +600,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
                 if (t.id !== "chapters") setSelectedChapterId(null);
               }}
               className={`
-                flex items-center gap-2 px-3 py-1.5 font-display font-black text-xs border-2 border-black transition-all rounded-none h-8
+                flex min-w-0 basis-0 flex-1 items-center justify-center gap-2 px-3 py-1.5 font-display font-black text-xs border-2 border-black transition-all rounded-none h-8
                 ${isActive 
                   ? `${t.color} text-black translate-x-0.5 translate-y-0.5 nb-shadow-xs` 
                   : "bg-white hover:bg-neutral-50 nb-shadow-sm hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:nb-shadow-xs"
@@ -608,7 +608,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
               `}
             >
               <Icon className="w-3.5 h-3.5 shrink-0" />
-              <span>{t.name}</span>
+              <span className="truncate block min-w-0">{t.name}</span>
             </button>
           );
         })}
