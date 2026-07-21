@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import LinkExtension from "@tiptap/extension-link";
@@ -25,7 +25,7 @@ import {
   CheckCircle,
   RefreshCw
 } from "lucide-react";
-import { updateChapter } from "@/lib/actions/chapterActions";
+import { updateChapter, scanChapterMentions } from "@/lib/actions/chapterActions";
 
 interface EditorProps {
   chapterId: string;
@@ -48,6 +48,15 @@ export function Editor({
   const [readingTime, setReadingTime] = useState(0);
   const [title, setTitle] = useState(initialTitle);
   const isFirstRender = useRef(true);
+  const lastMentionScan = useRef(0);
+  const statsTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const calculateStats = useCallback((text: string) => {
+    const cleanText = text.trim();
+    const wordList = cleanText === "" ? [] : cleanText.split(/\s+/);
+    setWords(wordList.length);
+    setReadingTime(Math.ceil(wordList.length / 200));
+  }, []);
 
   // Initialize TipTap Editor
   const editor = useEditor({
@@ -61,6 +70,7 @@ export function Editor({
       }),
     ],
     content: initialContent,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class: "focus:outline-none min-h-[450px] font-sans prose prose-neutral max-w-none text-black",
@@ -68,28 +78,11 @@ export function Editor({
     },
     onUpdate: ({ editor }) => {
       setSaveStatus("unsaved");
-      calculateStats(editor.getText());
+      // Debounce stats calculation to avoid O(n) split on every keystroke
+      if (statsTimer.current) clearTimeout(statsTimer.current);
+      statsTimer.current = setTimeout(() => calculateStats(editor.getText()), 500);
     },
   });
-
-  // Calculate stats (Word Count and Reading Time)
-  const calculateStats = (text: string) => {
-    const cleanText = text.trim();
-    const wordList = cleanText === "" ? [] : cleanText.split(/\s+/);
-    setWords(wordList.length);
-    setReadingTime(Math.ceil(wordList.length / 200));
-  };
-
-  // Reset editor content when chapterId changes
-  useEffect(() => {
-    if (editor && chapterId) {
-      editor.commands.setContent(initialContent);
-      setTitle(initialTitle);
-      calculateStats(editor.getText());
-      setSaveStatus("saved");
-      isFirstRender.current = true;
-    }
-  }, [chapterId, initialContent, initialTitle, editor]);
 
   // Debounced Autosave Effect
   useEffect(() => {
@@ -106,12 +99,21 @@ export function Editor({
       const htmlContent = editor.getHTML();
       
       try {
+        const now = Date.now();
         await updateChapter(chapterId, {
           title,
           content: htmlContent,
           wordCount: words,
+          skipMentionScan: true, // always skip in autosave
         });
         setSaveStatus("saved");
+        // Fire mention scan separately if 30s elapsed since last scan
+        if (now - lastMentionScan.current > 30000) {
+          lastMentionScan.current = now;
+          scanChapterMentions(chapterId).catch(err =>
+            console.error("Mention scan failed:", err)
+          );
+        }
         if (onSaveSuccess) onSaveSuccess(words);
       } catch (err) {
         console.error("Autosave failed:", err);

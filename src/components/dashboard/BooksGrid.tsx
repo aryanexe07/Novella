@@ -91,7 +91,6 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
 
       setIsCreateOpen(false);
       resetForm();
-      router.refresh();
     } catch (err) {
       console.error("Failed to create book:", err);
     } finally {
@@ -128,7 +127,6 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
 
       setIsEditOpen(false);
       resetForm();
-      router.refresh();
     } catch (err) {
       console.error("Failed to update book:", err);
     } finally {
@@ -142,7 +140,6 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
     try {
       await deleteBook(id);
       setBooks(books.filter(b => b.id !== id));
-      router.refresh();
     } catch (err) {
       console.error("Failed to delete book:", err);
     }
@@ -153,7 +150,6 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
       const newStatus = book.status === "ARCHIVED" ? "PLANNING" : "ARCHIVED";
       await updateBook(book.id, { status: newStatus });
       setBooks(books.map(b => b.id === book.id ? { ...b, status: newStatus } : b));
-      router.refresh();
     } catch (err) {
       console.error("Failed to archive book:", err);
     }

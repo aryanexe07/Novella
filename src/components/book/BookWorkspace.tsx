@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   FileText, 
@@ -22,8 +22,8 @@ import { Editor } from "@/components/Editor";
 
 // Server action imports
 import { createChapter, deleteChapter, reorderChapters } from "@/lib/actions/chapterActions";
-import { createCharacter, updateCharacter, deleteCharacter, createRelationship, deleteRelationship } from "@/lib/actions/characterActions";
-import { createLocation, updateLocation, deleteLocation } from "@/lib/actions/locationActions";
+import { createCharacter, updateCharacter, deleteCharacter, createRelationship, deleteRelationship, getCharacterWithDetails } from "@/lib/actions/characterActions";
+import { createLocation, updateLocation, deleteLocation, getLocationWithDetails } from "@/lib/actions/locationActions";
 import { createNote, updateNote, deleteNote } from "@/lib/actions/noteActions";
 import { createTimelineEvent, updateTimelineEvent, deleteTimelineEvent } from "@/lib/actions/timelineActions";
 
@@ -195,7 +195,10 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
     }
   }, [activeTab, book, selectedChapterId]);
 
-  const activeChapter = book.chapters.find(c => c.id === selectedChapterId);
+  const activeChapter = useMemo(
+    () => book.chapters.find(c => c.id === selectedChapterId),
+    [book.chapters, selectedChapterId]
+  );
 
   // ----------------------------------------------------
   // CHAPTER HANDLERS
@@ -213,7 +216,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       setSelectedChapterId(ch.id);
       setIsChapterCreateOpen(false);
       setChapterTitle("");
-      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -232,7 +234,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       if (selectedChapterId === id) {
         setSelectedChapterId(null);
       }
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -255,7 +256,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
 
     try {
       await reorderChapters(book.id, chaptersCopy.map(c => c.id));
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -300,7 +300,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       }
       setIsCharCreateOpen(false);
       setCharForm({ name: "", description: "", aliases: "", age: "", notes: "" });
-      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -319,7 +318,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       }));
       setIsCharDetailsOpen(false);
       setSelectedCharacter(null);
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -330,9 +328,7 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
     setIsCharDetailsOpen(true);
     setCharMentions([]);
 
-    // Fetch mentions/backlinks asynchronously via dynamic load helper or actions
     try {
-      const { getCharacterWithDetails } = await import("@/lib/actions/characterActions");
       const data = await getCharacterWithDetails(char.id);
       if (data) {
         setCharMentions(data.mentions || []);
@@ -369,7 +365,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       }));
 
       setRelationForm({ targetCharId: "", type: "" });
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -386,7 +381,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
         ...prev,
         relationships: prev.relationships.filter(r => r.id !== relId)
       }));
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -422,7 +416,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       }
       setIsLocCreateOpen(false);
       setLocForm({ name: "", description: "", notes: "" });
-      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -440,7 +433,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       }));
       setIsLocDetailsOpen(false);
       setSelectedLocation(null);
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -452,7 +444,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
     setLocMentions([]);
 
     try {
-      const { getLocationWithDetails } = await import("@/lib/actions/locationActions");
       const data = await getLocationWithDetails(loc.id);
       if (data) {
         setLocMentions(data.mentions || []);
@@ -490,7 +481,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       setIsNoteCreateOpen(false);
       setNoteForm({ title: "", content: "" });
       setSelectedNote(null);
-      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -506,7 +496,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
         ...prev,
         notes: prev.notes.filter(n => n.id !== id)
       }));
-      router.refresh();
     } catch (err) {
       console.error(err);
     }
@@ -540,7 +529,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
       setIsEventCreateOpen(false);
       setEventForm({ title: "", description: "", eventDate: "" });
       setSelectedEvent(null);
-      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -556,7 +544,6 @@ export function BookWorkspace({ book: initialBook }: BookWorkspaceProps) {
         ...prev,
         events: prev.events.filter(ev => ev.id !== id)
       }));
-      router.refresh();
     } catch (err) {
       console.error(err);
     }

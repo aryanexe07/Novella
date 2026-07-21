@@ -36,6 +36,9 @@ model Book {
   notes       Note[]
   events      TimelineEvent[]
   relationships Relationship[]
+
+  @@index([userId])
+  @@index([updatedAt])
 }
 
 model Chapter {
@@ -49,6 +52,10 @@ model Chapter {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   mentions    Mention[]
+
+  @@index([bookId])
+  @@index([bookId, order])
+  @@index([updatedAt])
 }
 
 model Character {
@@ -64,6 +71,9 @@ model Character {
   updatedAt       DateTime       @updatedAt
   relationshipsA  Relationship[] @relation("CharA")
   relationshipsB  Relationship[] @relation("CharB")
+
+  @@index([bookId])
+  @@index([name])
 }
 
 model Location {
@@ -75,6 +85,9 @@ model Location {
   notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([bookId])
+  @@index([name])
 }
 
 model Note {
@@ -85,6 +98,8 @@ model Note {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([bookId])
 }
 
 model TimelineEvent {
@@ -96,6 +111,8 @@ model TimelineEvent {
   eventDate   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([bookId])
 }
 
 model Relationship {
@@ -108,6 +125,10 @@ model Relationship {
   characterB       Character @relation("CharB", fields: [characterBId], references: [id], onDelete: Cascade)
   relationshipType String    // e.g. "Friend", "Enemy", "Parent", "Sibling", "Lover"
   createdAt        DateTime  @default(now())
+
+  @@index([bookId])
+  @@index([characterAId])
+  @@index([characterBId])
 }
 
 model Mention {
@@ -117,4 +138,7 @@ model Mention {
   entityId   String
   entityType String   // "CHARACTER" | "LOCATION"
   createdAt  DateTime @default(now())
+
+  @@index([chapterId])
+  @@index([entityId, entityType])
 }

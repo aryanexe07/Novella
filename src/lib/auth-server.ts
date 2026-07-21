@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { auth as clerkAuth, currentUser as clerkCurrentUser } from "@clerk/nextjs/server";
 import { db } from "./db";
 
@@ -22,21 +23,22 @@ export async function getCurrentUser() {
  * Ensures the authenticated Clerk user exists in the database.
  * Creates the user row if it is missing (upsert pattern).
  * Returns the DB user record, or null if unauthenticated.
+ *
+ * Wrapped in React.cache() so that if a layout and child page both call
+ * this in the same render pass, only one Clerk auth() and one DB query
+ * are issued.
  */
-export async function ensureUserExists() {
+export const ensureUserExists = cache(async () => {
   try {
     const { userId } = await clerkAuth();
     if (!userId) return null;
 
-    // 1. Try to find the user in the database first (fast path)
     let dbUser = await db.user.findUnique({ where: { id: userId } });
     if (dbUser) return dbUser;
 
-    // 2. If not found, fetch Clerk user details (slow path)
     const user = await getCurrentUser();
     if (!user) return null;
 
-    // 3. Upsert to handle concurrent requests safely creating the user
     dbUser = await db.user.upsert({
       where: { id: user.id },
       update: {
@@ -55,4 +57,4 @@ export async function ensureUserExists() {
     console.error("Error in ensureUserExists:", error);
     return null;
   }
-}
+});

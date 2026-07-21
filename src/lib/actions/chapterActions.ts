@@ -37,6 +37,7 @@ export async function updateChapter(
     content?: string;
     order?: number;
     wordCount?: number;
+    skipMentionScan?: boolean;
   }
 ) {
   const user = await ensureUserExists();
@@ -59,13 +60,30 @@ export async function updateChapter(
     },
   });
 
-  // If content is updated, rerun mention scanner
-  if (data.content !== undefined) {
+  // If content is updated and mention scan is not skipped, re-run mention scanner
+  if (data.content !== undefined && !data.skipMentionScan) {
     await scanAndCreateMentions(id, existingChapter.bookId, data.content);
   }
 
   revalidatePath(`/dashboard/books/${existingChapter.bookId}`);
   return chapter;
+}
+
+export async function scanChapterMentions(id: string) {
+  const user = await ensureUserExists();
+  if (!user) throw new Error("Unauthorized");
+
+  const chapter = await db.chapter.findUnique({
+    where: { id },
+    select: { bookId: true, content: true },
+  });
+
+  if (!chapter) throw new Error("Chapter not found");
+
+  await scanAndCreateMentions(id, chapter.bookId, chapter.content);
+
+  revalidatePath(`/dashboard/books/${chapter.bookId}`);
+  return { success: true };
 }
 
 export async function deleteChapter(id: string) {
