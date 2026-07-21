@@ -173,7 +173,7 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div>
       {/* Search and Action Bar */}
       <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
         <div className="relative flex-1 max-w-md">
@@ -493,5 +493,6 @@ export function BooksGrid({ initialBooks }: BooksGridProps) {
         </div>
       )}
     </div>
+    
   );
 }

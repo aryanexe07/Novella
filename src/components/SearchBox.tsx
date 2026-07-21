@@ -129,32 +129,32 @@ export function SearchBox({ isOpen, onClose, books }: SearchBoxProps) {
         className="w-full max-w-2xl bg-white border-4 border-black nb-shadow-lg flex flex-col rounded-none max-h-[85vh]"
       >
         {/* Top Header */}
-        <div className="p-4 border-b-4 border-black flex items-center gap-3 bg-nb-yellow">
-          <Search className="w-6 h-6 text-black shrink-0" />
+        <div className="px-4 py-3 border-b-4 border-black flex items-center gap-3 bg-[var(--color-nb-yellow)]">
+          <Search className="w-5 h-5 text-black shrink-0" />
           <input
             ref={inputRef}
             type="text"
             placeholder="Type to search characters, chapters, locations..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none font-bold text-lg text-black placeholder-neutral-700"
+            className="flex-1 bg-transparent border-none outline-none font-bold text-base text-black placeholder-neutral-600"
           />
           <button 
             onClick={onClose}
-            className="p-1 border-2 border-black bg-white hover:bg-neutral-50 active:translate-x-0.5 active:translate-y-0.5"
+            className="p-1 border-2 border-black bg-white hover:bg-neutral-50 nb-shadow-xs active:translate-y-0.5"
           >
-            <X className="w-4 h-4 text-black" />
+            <X className="w-3.5 h-3.5 text-black" />
           </button>
         </div>
 
         {/* Filter and Book Selector */}
-        <div className="p-3 border-b-2 border-black flex flex-wrap items-center justify-between gap-3 bg-neutral-50">
+        <div className="px-3 py-2.5 border-b-2 border-black flex flex-wrap items-center justify-between gap-2 bg-neutral-50">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase text-neutral-500">Searching inside:</span>
+            <span className="text-[10px] font-black uppercase text-neutral-500">Search in:</span>
             <select
               value={selectedBookId}
               onChange={(e) => setSelectedBookId(e.target.value)}
-              className="border-2 border-black px-2 py-1 font-bold text-xs bg-white focus:bg-yellow-50 outline-none"
+              className="border-2 border-black px-2 py-1 font-bold text-[10px] bg-white focus:bg-yellow-50 outline-none h-7"
             >
               {books.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -163,52 +163,52 @@ export function SearchBox({ isOpen, onClose, books }: SearchBoxProps) {
               ))}
             </select>
           </div>
-          <span className="text-xs font-bold text-neutral-400">Ctrl + K to toggle</span>
+          <span className="text-[10px] font-bold text-neutral-400">Ctrl+K to toggle</span>
         </div>
 
         {/* Search Results list */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 max-h-[50vh]">
+        <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-3 max-h-[50vh]">
           {loading && (
-            <div className="flex items-center justify-center py-10">
-              <div className="font-display font-black text-lg animate-pulse">SEARCHING WORKSPACE...</div>
+            <div className="flex items-center justify-center py-8">
+              <div className="font-display font-black text-sm animate-pulse">Searching...</div>
             </div>
           )}
 
           {!loading && !query.trim() && (
-            <div className="text-center py-10">
-              <p className="font-bold text-neutral-600">Start typing to search this book...</p>
-              <div className="flex justify-center gap-2 mt-4 flex-wrap">
-                <button onClick={() => handleNavigate("chapters")} className="nb-btn text-xs bg-nb-pink py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Chapters</button>
-                <button onClick={() => handleNavigate("characters")} className="nb-btn text-xs bg-nb-cyan py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Characters</button>
-                <button onClick={() => handleNavigate("locations")} className="nb-btn text-xs bg-nb-green py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Locations</button>
-                <button onClick={() => handleNavigate("notes")} className="nb-btn text-xs bg-nb-orange py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Notes</button>
+            <div className="text-center py-8">
+              <p className="font-bold text-neutral-600 text-sm">Start typing to search this book...</p>
+              <div className="flex justify-center gap-1.5 mt-3 flex-wrap">
+                <button onClick={() => handleNavigate("chapters")} className="nb-btn-xs bg-[var(--color-nb-pink)]">Chapters</button>
+                <button onClick={() => handleNavigate("characters")} className="nb-btn-xs bg-[var(--color-nb-cyan)]">Characters</button>
+                <button onClick={() => handleNavigate("locations")} className="nb-btn-xs bg-[var(--color-nb-green)]">Locations</button>
+                <button onClick={() => handleNavigate("notes")} className="nb-btn-xs bg-[var(--color-nb-orange)]">Notes</button>
               </div>
             </div>
           )}
 
           {!loading && query.trim() && !hasResults && (
-            <div className="text-center py-10">
+            <div className="text-center py-8">
               <p className="font-bold text-neutral-500">No matches found for &quot;{query}&quot;</p>
             </div>
           )}
 
           {!loading && query.trim() && hasResults && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {/* Chapters */}
               {results.chapters.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <p className="text-xs font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-nb-pink" /> Chapters
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1">
+                    <FileText className="w-3 h-3 text-[var(--color-nb-pink)]" /> Chapters
                   </p>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     {results.chapters.map((ch) => (
                       <button
                         key={ch.id}
                         onClick={() => handleNavigate("chapters", ch.id)}
-                        className="flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-sm w-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
+                        className="flex items-center justify-between p-2 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-xs w-full nb-shadow-xs hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
                       >
                         <span>{ch.title}</span>
-                        <span className="text-xs font-black text-neutral-400">Open in Editor</span>
+                        <span className="text-[9px] font-black text-neutral-400">Open in Editor</span>
                       </button>
                     ))}
                   </div>
@@ -217,19 +217,19 @@ export function SearchBox({ isOpen, onClose, books }: SearchBoxProps) {
 
               {/* Characters */}
               {results.characters.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <p className="text-xs font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-nb-cyan" /> Characters
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1">
+                    <Users className="w-3 h-3 text-[var(--color-nb-cyan)]" /> Characters
                   </p>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     {results.characters.map((char) => (
                       <button
                         key={char.id}
                         onClick={() => handleNavigate("characters", char.id)}
-                        className="flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-sm w-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
+                        className="flex items-center justify-between p-2 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-xs w-full nb-shadow-xs hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
                       >
                         <span>{char.name}</span>
-                        <span className="text-xs font-black text-neutral-400">View Profile</span>
+                        <span className="text-[9px] font-black text-neutral-400">View Profile</span>
                       </button>
                     ))}
                   </div>
@@ -238,19 +238,19 @@ export function SearchBox({ isOpen, onClose, books }: SearchBoxProps) {
 
               {/* Locations */}
               {results.locations.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <p className="text-xs font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-nb-green" /> Locations
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[var(--color-nb-green)]" /> Locations
                   </p>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     {results.locations.map((loc) => (
                       <button
                         key={loc.id}
                         onClick={() => handleNavigate("locations", loc.id)}
-                        className="flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-sm w-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
+                        className="flex items-center justify-between p-2 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-xs w-full nb-shadow-xs hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
                       >
                         <span>{loc.name}</span>
-                        <span className="text-xs font-black text-neutral-400">View Details</span>
+                        <span className="text-[9px] font-black text-neutral-400">View Details</span>
                       </button>
                     ))}
                   </div>
@@ -259,19 +259,19 @@ export function SearchBox({ isOpen, onClose, books }: SearchBoxProps) {
 
               {/* Notes */}
               {results.notes.length > 0 && (
-                <div className="flex flex-col gap-2">
-                  <p className="text-xs font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1.5">
-                    <Notebook className="w-3.5 h-3.5 text-nb-orange" /> Notes
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-[10px] font-black uppercase text-neutral-500 tracking-wider flex items-center gap-1">
+                    <Notebook className="w-3 h-3 text-[var(--color-nb-orange)]" /> Notes
                   </p>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     {results.notes.map((note) => (
                       <button
                         key={note.id}
                         onClick={() => handleNavigate("notes", note.id)}
-                        className="flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-sm w-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
+                        className="flex items-center justify-between p-2 border-2 border-black bg-white hover:bg-neutral-50 text-left font-bold text-xs w-full nb-shadow-xs hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
                       >
                         <span>{note.title}</span>
-                        <span className="text-xs font-black text-neutral-400">View Note</span>
+                        <span className="text-[9px] font-black text-neutral-400">View Note</span>
                       </button>
                     ))}
                   </div>

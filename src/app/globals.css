@@ -2,7 +2,6 @@
 @import "tailwindcss";
 
 
-
 @theme {
   --color-nb-yellow: #FDE047;
   --color-nb-pink: #F472B6;
@@ -15,6 +14,61 @@
   
   --font-sans: 'Outfit', sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
+  
+  /* Spacing Scale (8px base) */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-05: 2px;
+  --space-1: 4px;
+  --space-15: 6px;
+  --space-2: 8px;
+  --space-25: 10px;
+  --space-3: 12px;
+  --space-35: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  
+  /* Border Width Scale */
+  --border-hairline: 1px;
+  --border-thin: 2px;
+  --border-base: 3px;
+  --border-thick: 4px;
+  --border-heavy: 6px;
+  
+  /* Shadow Scale */
+  --shadow-xs: 1px 1px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-sm: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-base: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-md: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-lg: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-xl: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  
+  /* Typography Scale */
+  --text-xs: 0.7rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  
+  /* Radius (none for neo-brutalist) */
+  --radius-none: 0;
+  --radius-sm: 0;
+  --radius-base: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
 }
 
 :root {
@@ -31,6 +85,10 @@
   border: 2px solid #000000;
 }
 
+@utility nb-border-hairline {
+  border: 1px solid #000000;
+}
+
 @utility nb-shadow {
   box-shadow: 4px 4px 0px 0px #000000;
 }
@@ -43,14 +101,18 @@
   box-shadow: 2px 2px 0px 0px #000000;
 }
 
+@utility nb-shadow-xs {
+  box-shadow: 1px 1px 0px 0px #000000;
+}
+
 @utility nb-hover {
   transition: all 0.15s ease-in-out;
   &:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0px 0px #000000;
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0px 0px #000000;
   }
   &:active {
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
     box-shadow: 2px 2px 0px 0px #000000;
   }
 }
@@ -63,18 +125,44 @@
     box-shadow: 6px 6px 0px 0px #000000;
   }
   &:active {
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
     box-shadow: 2px 2px 0px 0px #000000;
   }
 }
 
+@utility nb-hover-sm {
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px 0px #000000;
+  }
+  &:active {
+    transform: translate(0.5px, 0.5px);
+    box-shadow: 1.5px 1.5px 0px 0px #000000;
+  }
+}
+
 @utility nb-card {
-  @apply nb-border bg-white text-black nb-shadow p-6 rounded-none;
+  @apply nb-border bg-white text-black nb-shadow p-5 rounded-none;
 }
 
 @utility nb-btn {
-  @apply nb-border nb-shadow nb-hover-btn font-bold px-4 py-2 text-black rounded-none select-none inline-flex items-center justify-center gap-2;
+  @apply nb-border nb-shadow nb-hover-btn font-bold px-5 py-2.5 text-black rounded-none select-none inline-flex items-center justify-center gap-2;
   font-family: var(--font-display);
+  height: 40px;
+}
+
+@utility nb-btn-sm {
+  @apply nb-border nb-shadow-sm nb-hover-btn font-bold px-3 py-1.5 text-xs text-black rounded-none select-none inline-flex items-center justify-center gap-1.5;
+  font-family: var(--font-display);
+  height: 28px;
+}
+
+@utility nb-btn-xs {
+  @apply nb-border-hairline nb-shadow-xs nb-hover-sm font-bold px-2 py-1 text-[10px] text-black rounded-none select-none inline-flex items-center justify-center gap-1;
+  font-family: var(--font-display);
+  height: 22px;
 }
 
 @utility nb-btn-primary {
@@ -99,10 +187,30 @@
 
 @utility nb-input {
   @apply nb-border px-4 py-2 bg-white text-black outline-none focus:bg-yellow-50 focus:ring-2 focus:ring-black rounded-none font-medium placeholder-neutral-500;
+  height: 40px;
+}
+
+@utility nb-input-sm {
+  @apply nb-border-thin px-3 py-1.5 bg-white text-black outline-none focus:bg-yellow-50 rounded-none font-medium placeholder-neutral-500 text-sm;
+  height: 32px;
 }
 
 @utility nb-select {
   @apply nb-border px-4 py-2 bg-white text-black outline-none focus:bg-yellow-50 rounded-none font-medium;
+  height: 40px;
+}
+
+@utility nb-select-sm {
+  @apply nb-border-thin px-3 py-1.5 bg-white text-black outline-none focus:bg-yellow-50 rounded-none font-medium text-sm;
+  height: 32px;
+}
+
+@utility nb-badge {
+  @apply nb-border-thin px-2 py-0.5 text-xs font-black uppercase rounded-none inline-flex items-center gap-1;
+}
+
+@utility nb-divider {
+  @apply border-black;
 }
 
 body {
@@ -189,4 +297,30 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
   height: 0;
   font-style: italic;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling for neo-brutalist */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FCFBF7;
+  border-left: 2px solid #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border: none;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+::-webkit-scrollbar-corner {
+  background: #FCFBF7;
 }

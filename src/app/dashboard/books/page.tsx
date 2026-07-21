@@ -17,10 +17,10 @@ export default async function BooksPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1 border-b-4 border-black pb-4">
-        <h2 className="text-3xl font-black font-display tracking-tight uppercase">My Manuscripts</h2>
-        <p className="text-sm font-bold text-neutral-600">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-0.5 border-b-4 border-black pb-3">
+        <h2 className="text-2xl font-black font-display tracking-tight uppercase">My Manuscripts</h2>
+        <p className="text-xs font-bold text-neutral-500">
           Create and organize your books, outline chapters, and build your story world.
         </p>
       </div>
